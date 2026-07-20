@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support Scripts</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>💬 Customer Support Chat Scripts</h1>
+        <p>Έτοιμα κείμενα απαντήσεων για τους Agents</p>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Κατηγορίες</h3>
+            <div id="category-buttons"></div>
+        </aside>
+
+        <main class="content">
+            <input type="text" id="search-bar" placeholder="🔍 Αναζήτηση κειμένου..." onkeyup="filterScripts()">
+            <div id="scripts-container" class="scripts-grid"></div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
