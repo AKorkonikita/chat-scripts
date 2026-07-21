@@ -1,36 +1,35 @@
-const scriptsData = [
-    {
-        id: 1,
-        category: "Χαιρετισμοί",
-        title: "Καλωσόρισμα Πελάτη",
-        text: "Γεια σας! Ονομάζομαι [Όνομα] από την εξυπηρέτηση πελατών. Πώς μπορώ να σας βοηθήσω σήμερα;"
-    },
-    {
-        id: 2,
-        category: "Χαιρετισμοί",
-        title: "Κλείσιμο Chat",
-        text: "Σας ευχαριστούμε που επικοινωνήσατε μαζί μας. Ευχόμαστε να έχετε μια όμορφη ημέρα!"
-    },
-    {
-        id: 3,
-        category: "Παραγγελίες",
-        title: "Καθυστέρηση Αποστολής",
-        text: "Σας ενημερώνουμε ότι λόγω αυξημένου όγκου παραγγελιών, η αποστολή σας θα καθυστερήσει 1-2 εργάσιμες ημέρες."
-    },
-    {
-        id: 4,
-        category: "Επιστροφές",
-        title: "Οδηγίες Επιστροφής",
-        text: "Μπορείτε να επιστρέψετε το προϊόν εντός 14 ημερών, συμπληρώνοντας τη φόρμα επιστροφής στο site μας."
-    }
-];
+// ΒΑΛΕ ΕΔΩ ΤΟ ID ΤΟΥ GOOGLE SHEET ΣΟΥ:https://docs.google.com/spreadsheets/d/1phqkJYI67_mdb6pmXdiOSQomfafNrzQZV3nBFN3UQ-k/edit?gid=0#gid=0
+const SHEET_ID = "1a2b3c4d5e6f7g8h9"; 
 
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+let scriptsData = [];
 let selectedCategory = "Όλα";
 
 document.addEventListener("DOMContentLoaded", () => {
-    renderCategories();
-    renderScripts(scriptsData);
+    fetchDataFromGoogleSheet();
 });
+
+function fetchDataFromGoogleSheet() {
+    fetch(SHEET_URL)
+        .then(res => res.text())
+        .then(data => {
+            // Καθαρισμός του JSON που επιστρέφει το Google Sheets
+            const json = JSON.parse(data.substring(47, data.length - 2));
+            const rows = json.table.rows;
+            
+            scriptsData = rows.map((row, index) => ({
+                id: index + 1,
+                category: row.c[0] ? row.c[0].v : "Γενικά",
+                title: row.c[1] ? row.c[1].v : "Χωρίς Τίτλο",
+                text: row.c[2] ? row.c[2].v : ""
+            }));
+
+            renderCategories();
+            renderScripts(scriptsData);
+        })
+        .catch(err => console.error("Σφάλμα φόρτωσης δεδομένων:", err));
+}
 
 function renderCategories() {
     const categories = ["Όλα", ...new Set(scriptsData.map(item => item.category))];
