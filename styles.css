@@ -1,28 +1,8 @@
-/* Stoiximan Brand Colors Setup */
-:root {
-    --bg-main: #0b0f19;       
-    --bg-card: #151c2c;       
-    --bg-hover: #1e283d;      
-    --border-color: #243047;  
-    --primary-blue: #0066ff;  
-    --neon-green: #00ff66;    /* Φωσφοριζέ πράσινο */
-    --text-white: #ffffff;
-    --text-muted: #94a3b8;
-}
-
-body {
-    background-color: var(--bg-main);
-    color: var(--text-white);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
 /* Header Bar */
 .navbar {
     background-color: var(--bg-card);
     border-bottom: 2px solid var(--primary-blue);
-    padding: 14px 24px;
+    padding: 18px 28px; /* Λίγο περισσότερο "αέρα" πάνω-κάτω */
     display: flex;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -31,169 +11,27 @@ body {
 .nav-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px; /* Μεγαλύτερο κενό ανάμεσα σε Stoiximan και τίτλο */
 }
 
-/* Stylized Text Logo αντί για σπασμένη εικόνα */
+/* Μεγαλύτερο & πιο έντονο Logo */
 .brand-text {
     color: #ffffff;
-    font-size: 1.5rem;
+    font-size: 2.2rem; /* Αυξήθηκε από 1.5rem σε 2.2rem */
     font-weight: 900;
-    letter-spacing: -0.5px;
+    letter-spacing: -1px;
     font-style: italic;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Ελαφριά λάμψη */
 }
 
 .app-divider {
     color: var(--primary-blue);
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     font-weight: bold;
 }
 
 .app-title {
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 600;
-}
-
-/* Main Layout */
-.container {
-    display: flex;
-    gap: 20px;
-    max-width: 1400px;
-    margin: 24px auto;
-    padding: 0 20px;
-}
-
-/* Sidebar */
-.sidebar {
-    width: 260px;
-    background: var(--bg-card);
-    padding: 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    height: fit-content;
-}
-
-.sidebar-header h3 {
-    margin: 0 0 16px 0;
-    color: var(--text-white);
-    font-size: 1.05rem;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 8px;
-}
-
-.cat-btn {
-    display: block;
-    width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    background: var(--bg-main);
-    color: var(--text-muted);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: left;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-}
-
-.cat-btn:hover {
-    background: var(--bg-hover);
-    color: var(--text-white);
-    border-color: var(--primary-blue);
-}
-
-.cat-btn.active {
-    background: var(--primary-blue);
-    color: var(--text-white);
-    border-color: var(--primary-blue);
-    font-weight: 700;
-}
-
-/* Content & Search */
-.content {
-    flex: 1;
-}
-
-.search-container {
-    margin-bottom: 20px;
-}
-
-#search-bar {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-white);
-    font-size: 0.95rem;
-    box-sizing: border-box;
-    outline: none;
-}
-
-#search-bar:focus {
-    border-color: var(--primary-blue);
-}
-
-/* Cards Grid */
-.scripts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
-}
-
-.card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.card:hover {
-    border-color: var(--primary-blue);
-}
-
-.card h4 {
-    margin: 0 0 12px 0;
-    color: var(--primary-blue);
-    font-size: 1.05rem;
-    font-weight: 700;
-}
-
-.card p {
-    font-size: 0.92rem;
-    color: #d1d5db;
-    line-height: 1.5;
-    white-space: pre-line;
-    flex-grow: 1;
-    margin: 0 0 16px 0;
-}
-
-/* Φωσφοριζέ Κουμπί Αντιγραφής */
-.copy-btn {
-    padding: 11px;
-    background: #00ff66 !important; /* Neon Green */
-    color: #0b0f19 !important;      /* Σκούρα γράμματα */
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 800;
-    font-size: 0.92rem;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
-}
-
-.copy-btn:hover {
-    background: #33ff85 !important;
-    box-shadow: 0 0 18px rgba(0, 255, 102, 0.7);
 }
