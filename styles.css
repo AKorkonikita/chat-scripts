@@ -1,11 +1,11 @@
-/* Stoiximan Brand Colors & Dark Theme Setup */
+/* Stoiximan Brand Colors Setup */
 :root {
-    --bg-main: #0b0f19;       /* Βαθύ σκούρο φόντο Stoiximan */
-    --bg-card: #151c2c;       /* Χρώμα καρτών & πάνελ */
-    --bg-hover: #1e283d;      /* Hover εφέ */
-    --border-color: #243047;  /* Διακριτικό περίγραμμα */
-    --primary-blue: #0066ff;  /* Stoiximan Blue */
-    --neon-green: #00ff66;    /* Φωσφοριζέ Neon Green */
+    --bg-main: #0b0f19;       
+    --bg-card: #151c2c;       
+    --bg-hover: #1e283d;      
+    --border-color: #243047;  
+    --primary-blue: #0066ff;  
+    --neon-green: #00ff66;    /* Φωσφοριζέ πράσινο */
     --text-white: #ffffff;
     --text-muted: #94a3b8;
 }
@@ -18,14 +18,13 @@ body {
     padding: 0;
 }
 
-/* Header & Logo Bar */
+/* Header Bar */
 .navbar {
     background-color: var(--bg-card);
     border-bottom: 2px solid var(--primary-blue);
-    padding: 12px 24px;
+    padding: 14px 24px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
@@ -35,21 +34,25 @@ body {
     gap: 12px;
 }
 
-.brand-logo {
-    height: 28px;
-    object-fit: contain;
+/* Stylized Text Logo αντί για σπασμένη εικόνα */
+.brand-text {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    font-style: italic;
 }
 
 .app-divider {
-    color: var(--border-color);
+    color: var(--primary-blue);
     font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .app-title {
     color: var(--text-muted);
     font-size: 0.95rem;
     font-weight: 600;
-    letter-spacing: 0.5px;
 }
 
 /* Main Layout */
@@ -61,7 +64,7 @@ body {
     padding: 0 20px;
 }
 
-/* Sidebar Navigation */
+/* Sidebar */
 .sidebar {
     width: 260px;
     background: var(--bg-card);
@@ -129,14 +132,13 @@ body {
     font-size: 0.95rem;
     box-sizing: border-box;
     outline: none;
-    transition: border-color 0.2s;
 }
 
 #search-bar:focus {
     border-color: var(--primary-blue);
 }
 
-/* Scripts Cards Grid */
+/* Cards Grid */
 .scripts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -151,12 +153,10 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.2s, border-color 0.2s;
 }
 
 .card:hover {
     border-color: var(--primary-blue);
-    transform: translateY(-2px);
 }
 
 .card h4 {
@@ -175,26 +175,25 @@ body {
     margin: 0 0 16px 0;
 }
 
-/* Action Button (Φωσφοριζέ Stoiximan Green) */
+/* Φωσφοριζέ Κουμπί Αντιγραφής */
 .copy-btn {
     padding: 11px;
-    background: var(--neon-green);
-    color: #0b0f19;      /* Σκούρο κείμενο για τέλεια αντίθεση */
+    background: #00ff66 !important; /* Neon Green */
+    color: #0b0f19 !important;      /* Σκούρα γράμματα */
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-weight: 800;    /* Extra bold */
+    font-weight: 800;
     font-size: 0.92rem;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    box-shadow: 0 0 10px rgba(0, 255, 102, 0.35); /* Neon glow */
+    box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
 }
 
 .copy-btn:hover {
-    background: #33ff85; /* Ακόμα πιο ανοιχτό στο hover */
-    box-shadow: 0 0 16px rgba(0, 255, 102, 0.6); /* Έντονη λάμψη */
-    transform: translateY(-1px);
+    background: #33ff85 !important;
+    box-shadow: 0 0 18px rgba(0, 255, 102, 0.7);
 }
