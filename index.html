@@ -3,26 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Support Scripts</title>
+    <title>Stoiximan CS Assistant</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="logo.png" type="image/png">
 </head>
 <body>
 
-    <header>
-        <h1>💬 Customer Support Chat Scripts</h1>
-        <p>Έτοιμα κείμενα απαντήσεων για τους Agents</p>
+    <!-- Stoiximan Top Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-left">
+            <img src="logo.png" alt="Stoiximan Logo" class="brand-logo">
+            <span class="app-title">| CS Chat Scripts</span>
+        </div>
     </header>
 
     <div class="container">
-        <!-- Sidebar με Κατηγορίες -->
+        <!-- Sidebar Κατηγοριών -->
         <aside class="sidebar">
-            <h3>Κατηγορίες</h3>
+            <div class="sidebar-header">
+                <h3>Κατηγορίες</h3>
+            </div>
             <div id="category-buttons"></div>
         </aside>
 
-        <!-- Κύριο Μέρος -->
+        <!-- Κύριο Περιεχόμενο -->
         <main class="content">
-            <input type="text" id="search-bar" placeholder="🔍 Αναζήτηση κειμένου..." onkeyup="filterScripts()">
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="🔍 Αναζήτηση απάντησης ή λέξης-κλειδιού..." onkeyup="filterScripts()">
+            </div>
             <div id="scripts-container" class="scripts-grid"></div>
         </main>
     </div>
