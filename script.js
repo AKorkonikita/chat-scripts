@@ -15,16 +15,20 @@ function fetchDataFromGoogleSheet() {
     fetch(SHEET_URL)
         .then(res => res.text())
         .then(data => {
-            // Καθαρισμός του JSON
             const json = JSON.parse(data.substring(47, data.length - 2));
             const rows = json.table.rows;
             
-            scriptsData = rows.map((row, index) => ({
-                id: index + 1,
-                category: row.c[0] ? row.c[0].v : "Γενικά",
-                title: row.c[1] ? row.c[1].v : "Χωρίς Τίτλο",
-                text: row.c[2] ? row.c[2].v : ""
-            }));
+            // Παράκαμψη της 1ης γραμμής (Headers: category, title, text)
+            const contentRows = rows.slice(1);
+
+            scriptsData = contentRows
+                .filter(row => row.c && (row.c[0] || row.c[1] || row.c[2])) // Αγνοεί κενές γραμμές
+                .map((row, index) => ({
+                    id: index + 1,
+                    category: row.c && row.c[0] && row.c[0].v ? row.c[0].v : "Γενικά",
+                    title: row.c && row.c[1] && row.c[1].v ? row.c[1].v : "Χωρίς Τίτλο",
+                    text: row.c && row.c[2] && row.c[2].v ? row.c[2].v : ""
+                }));
 
             renderCategories();
             renderScripts(scriptsData);
@@ -45,6 +49,12 @@ function renderCategories() {
 // Εμφάνιση Καρτών Κειμένου
 function renderScripts(data) {
     const container = document.getElementById("scripts-container");
+    
+    if (data.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1;">Δεν βρέθηκαν αποτελέσματα.</p>`;
+        return;
+    }
+
     container.innerHTML = data.map(item => `
         <div class="card">
             <h4>${item.title}</h4>
@@ -76,16 +86,23 @@ function filterScripts() {
     renderScripts(filtered);
 }
 
-// Λειτουργία Αντιγραφής
+// Λειτουργία Αντιγραφής (με επιστροφή στο neon green)
 function copyToClipboard(id, button) {
-    const text = document.getElementById(`text-${id}`).innerText;
+    const textElement = document.getElementById(`text-${id}`);
+    const text = textElement ? textElement.innerText : "";
+    
     navigator.clipboard.writeText(text).then(() => {
         const originalText = button.innerHTML;
         button.innerHTML = "✅ Αντιγράφηκε!";
-        button.style.background = "#0969da";
+        button.style.background = "#0066ff";
+        button.style.color = "#ffffff";
+        button.style.boxShadow = "0 0 12px rgba(0, 102, 255, 0.5)";
+
         setTimeout(() => {
             button.innerHTML = originalText;
-            button.style.background = "#238636";
+            button.style.background = "#00ff66";
+            button.style.color = "#0b0f19";
+            button.style.boxShadow = "0 0 10px rgba(0, 255, 102, 0.35)";
         }, 1500);
     });
 }
