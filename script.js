@@ -184,16 +184,16 @@ function toggleTheme() {
     }
 }
 
-// Επεξεργασία κειμένου ώστε να υποστηρίζει ασφαλώς links
+// Επεξεργασία κειμένου ώστε να επιτρέπει HTML tags και αυτόματα URLs
 function formatTextWithLinks(str) {
     if (!str) return '';
     
-    // Αν περιέχει ήδη <a> tag, το αφήνουμε
-    if (str.includes('<a ') || str.includes('</a>')) {
+    // Αν το κείμενο περιέχει ήδη HTML tags (π.χ. <a href=...), το προβάλλουμε απευθείας
+    if (/<[a-z][\s\S]*>/i.test(str)) {
         return str;
     }
 
-    // Ασφαλής μετατροπή σκέτων URLs (http/https) σε clickable links
+    // Διαφορετικά, μετατρέπουμε αυτόματα τα σκέτα URLs (http/https) σε links
     const urlPattern = /(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     return escapeHTML(str).replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 }
