@@ -219,6 +219,17 @@ body {
     margin: 0 0 16px 0;
 }
 
+/* Styling για Links μέσα στις κάρτες */
+.card p a, .card h4 a {
+    color: var(--primary-blue);
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.card p a:hover, .card h4 a:hover {
+    color: #0088ff;
+}
+
 /* Neon Copy Button */
 .copy-btn {
     padding: 11px;
