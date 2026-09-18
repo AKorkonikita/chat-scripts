@@ -8,7 +8,7 @@
     --neon-green: #00ff66;    
     --text-white: #0f172a;
     --text-muted: #64748b;
-    --logo-color: #0066ff;    /* Μπλε Stoiximan logo στο Light Mode */
+    --logo-color: #0066ff;
 }
 
 /* Dark Mode Overrides */
@@ -19,7 +19,7 @@ body.dark-mode {
     --border-color: #243047;  
     --text-white: #ffffff;
     --text-muted: #94a3b8;
-    --logo-color: #ffffff;    /* Λευκό logo στο Dark Mode */
+    --logo-color: #ffffff;
 }
 
 body {
@@ -219,7 +219,6 @@ body {
     margin: 0 0 16px 0;
 }
 
-/* Styling για Links μέσα στις κάρτες */
 .card p a, .card h4 a {
     color: var(--primary-blue);
     text-decoration: underline;
