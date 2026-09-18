@@ -145,7 +145,7 @@ body {
 }
 
 .cat-btn.info-btn.active {
-    background: #f59e0b !important; /* Πορτοκαλί διακριτικό χρώμα για τις πληροφορίες SOS */
+    background: #f59e0b !important;
     border-color: #f59e0b !important;
 }
 
@@ -192,7 +192,7 @@ body {
 }
 
 .card.info-card {
-    border-left: 4px solid #f59e0b; /* Πορτοκαλί γραμμή στα αριστερά για τις SOS κάρτες */
+    border-left: 4px solid #f59e0b;
 }
 
 .card:hover {
