@@ -140,8 +140,8 @@ function renderScripts(items) {
 
         card.innerHTML = `
             <div>
-                <h4>${escapeHTML(item.title)}</h4>
-                <p>${escapeHTML(item.text)}</p>
+                <h4>${formatTextWithLinks(item.title)}</h4>
+                <p>${formatTextWithLinks(item.text)}</p>
             </div>
             ${!isInfo ? `
             <button class="copy-btn" onclick="copyToClipboard(\`${escapeQuotes(item.text)}\`, this)">
@@ -154,7 +154,10 @@ function renderScripts(items) {
 }
 
 function copyToClipboard(text, btn) {
-    navigator.clipboard.writeText(text).then(() => {
+    // Αφαιρούμε τυχόν HTML tags πριν την αντιγραφή στο πρόχειρο
+    const cleanText = text.replace(/<[^>]*>?/gm, '');
+    
+    navigator.clipboard.writeText(cleanText).then(() => {
         const originalText = btn.innerHTML;
         btn.innerHTML = '✅ Αντιγράφηκε!';
         btn.style.background = '#00cc52';
@@ -179,6 +182,20 @@ function toggleTheme() {
         if (btn) btn.innerHTML = '☀️ Light Mode';
         localStorage.setItem('theme', 'dark');
     }
+}
+
+// Επεξεργασία κειμένου ώστε να υποστηρίζει ασφαλώς links
+function formatTextWithLinks(str) {
+    if (!str) return '';
+    
+    // Αν περιέχει ήδη <a> tag, το αφήνουμε
+    if (str.includes('<a ') || str.includes('</a>')) {
+        return str;
+    }
+
+    // Ασφαλής μετατροπή σκέτων URLs (http/https) σε clickable links
+    const urlPattern = /(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return escapeHTML(str).replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 }
 
 function escapeHTML(str) {
