@@ -1,12 +1,14 @@
-// Σύνδεσμος για το Google Sheet (Opensheet API για αποφυγή CORS & άμεση φόρτωση)
 const SHEET_ID = '1phqkJYI67_mdb6pmXdiOSQomfafNrzQZV3nBFN3UQ-k';
-const SHEET_URL = `https://opensheet.elk.sh/${SHEET_ID}/1`;
+
+// Φόρτωση 1ου tab (Scripts) & 2ου tab (Info)
+const SCRIPTS_URL = `https://opensheet.elk.sh/${SHEET_ID}/1`;
+const INFO_URL = `https://opensheet.elk.sh/${SHEET_ID}/2`;
 
 let allScripts = [];
+let allInfos = [];
+let currentMode = 'scripts'; // 'scripts' ή 'info'
 
-// Φόρτωση δεδομένων κατά την εκκίνηση
 window.addEventListener('DOMContentLoaded', () => {
-    // Επαναφορά θέματος
     const savedTheme = localStorage.getItem('theme');
     const themeBtn = document.getElementById('theme-toggle');
     
@@ -15,23 +17,31 @@ window.addEventListener('DOMContentLoaded', () => {
         if (themeBtn) themeBtn.innerHTML = '🌙 Dark Mode';
     }
 
-    fetchScripts();
+    fetchAllData();
 });
 
-// Λήψη δεδομένων JSON
-async function fetchScripts() {
+async function fetchAllData() {
     try {
-        const response = await fetch(SHEET_URL);
-        const data = await response.json();
+        const [scriptsRes, infoRes] = await Promise.all([
+            fetch(SCRIPTS_URL).then(r => r.json()),
+            fetch(INFO_URL).then(r => r.json()).catch(() => [])
+        ]);
         
-        // Καθαρισμός και μορφοποίηση δεδομένων
-        allScripts = data.map(row => ({
+        allScripts = scriptsRes.map(row => ({
             category: row.category || row.Category || 'Γενικά',
             title: row.title || row.Title || 'Χωρίς Τίτλο',
-            text: row.text || row.Text || ''
+            text: row.text || row.Text || '',
+            type: 'script'
         }));
-        
-        renderCategories(allScripts);
+
+        allInfos = infoRes.map(row => ({
+            category: row.category || row.Category || 'Γενικά',
+            title: row.title || row.Title || 'Χωρίς Τίτλο',
+            text: row.text || row.Text || '',
+            type: 'info'
+        }));
+
+        renderCategories();
         renderScripts(allScripts);
     } catch (error) {
         console.error('Σφάλμα φόρτωσης:', error);
@@ -42,91 +52,97 @@ async function fetchScripts() {
     }
 }
 
-// Προβολή Κατηγοριών
-function renderCategories(scripts) {
-    const categoryButtonsContainer = document.getElementById('category-buttons');
-    if (!categoryButtonsContainer) return;
+function renderCategories() {
+    const scriptsContainer = document.getElementById('category-buttons');
+    const infoContainer = document.getElementById('info-category-buttons');
 
-    const categories = ['Όλα', ...new Set(scripts.map(s => s.category).filter(Boolean))];
-    categoryButtonsContainer.innerHTML = '';
-    
-    categories.forEach((cat, index) => {
+    // 1. Κατηγορίες Scripts
+    const scriptCats = ['Όλα', ...new Set(allScripts.map(s => s.category).filter(Boolean))];
+    scriptsContainer.innerHTML = '';
+    scriptCats.forEach((cat, index) => {
         const btn = document.createElement('button');
         btn.className = `cat-btn ${index === 0 ? 'active' : ''}`;
         btn.textContent = cat;
-        btn.onclick = () => filterByCategory(cat, btn);
-        categoryButtonsContainer.appendChild(btn);
+        btn.onclick = () => filterContent('scripts', cat, btn);
+        scriptsContainer.appendChild(btn);
     });
+
+    // 2. Κατηγορίες Info
+    const infoCats = [...new Set(allInfos.map(s => s.category).filter(Boolean))];
+    infoContainer.innerHTML = '';
+    if (infoCats.length === 0) {
+        infoContainer.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Δεν υπάρχουν SOS ακόμα.</p>';
+    } else {
+        infoCats.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'cat-btn info-btn';
+            btn.textContent = `💡 ${cat}`;
+            btn.onclick = () => filterContent('info', cat, btn);
+            infoContainer.appendChild(btn);
+        });
+    }
 }
 
-// Φιλτράρισμα βάσει Κατηγορίας
-function filterByCategory(category, clickedBtn) {
+function filterContent(type, category, clickedBtn) {
     document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-    clickedBtn.classList.add('active');
+    if (clickedBtn) clickedBtn.classList.add('active');
 
     const searchBar = document.getElementById('search-bar');
-    if (searchBar) searchBar.value = '';
 
-    if (category === 'Όλα') {
-        renderScripts(allScripts);
+    if (type === 'scripts') {
+        currentMode = 'scripts';
+        if (searchBar) searchBar.value = '';
+        const filtered = category === 'Όλα' ? allScripts : allScripts.filter(s => s.category === category);
+        renderScripts(filtered);
+    } else if (type === 'info') {
+        currentMode = 'info';
+        if (searchBar) searchBar.value = '';
+        const filtered = allInfos.filter(s => s.category === category);
+        renderScripts(filtered);
     } else {
-        const filtered = allScripts.filter(s => s.category === category);
+        // Live search φιλτράρισμα
+        const query = searchBar.value.toLowerCase();
+        const pool = [...allScripts, ...allInfos];
+        const filtered = pool.filter(s => 
+            (s.title && s.title.toLowerCase().includes(query)) || 
+            (s.text && s.text.toLowerCase().includes(query)) ||
+            (s.category && s.category.toLowerCase().includes(query))
+        );
         renderScripts(filtered);
     }
 }
 
-// Αναζήτηση
-function filterScripts() {
-    const query = document.getElementById('search-bar').value.toLowerCase();
-    
-    document.querySelectorAll('.cat-btn').forEach((btn, index) => {
-        if (index === 0) btn.classList.add('active');
-        else btn.classList.remove('active');
-    });
-
-    const filtered = allScripts.filter(s => 
-        (s.title && s.title.toLowerCase().includes(query)) || 
-        (s.text && s.text.toLowerCase().includes(query)) ||
-        (s.category && s.category.toLowerCase().includes(query))
-    );
-    
-    renderScripts(filtered);
-}
-
-// Προβολή Καρτών
-function renderScripts(scripts) {
+function renderScripts(items) {
     const container = document.getElementById('scripts-container');
     if (!container) return;
 
     container.innerHTML = '';
 
-    if (scripts.length === 0) {
+    if (items.length === 0) {
         container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1;">Δεν βρέθηκαν αποτελέσματα.</p>';
         return;
     }
 
-    scripts.forEach(script => {
+    items.forEach(item => {
         const card = document.createElement('div');
-        card.className = 'card';
-
-        const titleText = script.title;
-        const bodyText = script.text;
+        const isInfo = item.type === 'info';
+        card.className = `card ${isInfo ? 'info-card' : ''}`;
 
         card.innerHTML = `
             <div>
-                <h4>${escapeHTML(titleText)}</h4>
-                <p>${escapeHTML(bodyText)}</p>
+                <h4>${escapeHTML(item.title)}</h4>
+                <p>${escapeHTML(item.text)}</p>
             </div>
-            <button class="copy-btn" onclick="copyToClipboard(\`${escapeQuotes(bodyText)}\`, this)">
+            ${!isInfo ? `
+            <button class="copy-btn" onclick="copyToClipboard(\`${escapeQuotes(item.text)}\`, this)">
                 📋 Αντιγραφή
-            </button>
+            </button>` : ''}
         `;
 
         container.appendChild(card);
     });
 }
 
-// Αντιγραφή στο Clipboard
 function copyToClipboard(text, btn) {
     navigator.clipboard.writeText(text).then(() => {
         const originalText = btn.innerHTML;
@@ -137,12 +153,9 @@ function copyToClipboard(text, btn) {
             btn.innerHTML = originalText;
             btn.style.background = '';
         }, 1800);
-    }).catch(err => {
-        console.error('Σφάλμα αντιγραφής: ', err);
-    });
+    }).catch(err => console.error('Σφάλμα αντιγραφής: ', err));
 }
 
-// Διαχείριση Dark / Light Mode
 function toggleTheme() {
     const body = document.body;
     const btn = document.getElementById('theme-toggle');
@@ -160,13 +173,7 @@ function toggleTheme() {
 
 function escapeHTML(str) {
     return str.replace(/[&<>'"]/g, 
-        tag => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            "'": '&#39;',
-            '"': '&quot;'
-        }[tag] || tag)
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
     );
 }
 
