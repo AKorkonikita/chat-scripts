@@ -1,6 +1,5 @@
-// Σύνδεσμος για το δημοσιευμένο Google Sheet (JSON Feed / CSV Export)
-// Αντικατάστησε το URL με το δικό σου Google Sheet CSV link αν χρειάζεται
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1phqkJYI67_mdb6pmXdiOSQomfafNrzQZV3nBFN3UQ-k/edit?gid=0#gid=0';
+// Σύνδεσμος για το Google Sheet σε CSV format
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1phqkJYI67_mdb6pmXdiOSQomfafNrzQZV3nBFN3UQ-k/gviz/tq?tqx=out:csv';
 
 let allScripts = [];
 
@@ -35,8 +34,8 @@ async function fetchScripts() {
         console.error('Σφάλμα κατά τη φόρτωση των δεδομένων:', error);
         document.getElementById('scripts-container').innerHTML = `
             <p style="color: #ef4444; grid-column: 1/-1;">
-                ⚠️ Αποτυχία φόρτωσης δεδομένων. Παρακαλώ βεβαιωθείτε ότι το Google Sheet είναι δημοσιευμένο στο web.
-            </p>;
+                ⚠️ Αποτυχία φόρτωσης δεδομένων. Παρακαλώ βεβαιωθείτε ότι το Google Sheet είναι προσβάσιμο.
+            </p>`;
     }
 }
 
