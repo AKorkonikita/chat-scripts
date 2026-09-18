@@ -1,11 +1,19 @@
 const SHEET_ID = '1phqkJYI67_mdb6pmXdiOSQomfafNrzQZV3nBFN3UQ-k';
 
-// Φόρτωση 1ου tab (Scripts) & 2ου tab (Info)
 const SCRIPTS_URL = `https://opensheet.elk.sh/${SHEET_ID}/1`;
-const INFO_URL = `https://opensheet.elk.sh/${SHEET_ID}/2`;
+const INFO_URL = `https://opensheet.elk.sh/${SHEET_ID}/Info`;
 
 let allScripts = [];
 let allInfos = [];
+
+// Συνάρτηση αφαίρεσης τόνων & μετατροπής σε πεζά
+function normalizeText(text) {
+    if (!text) return '';
+    return text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+}
 
 window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme');
@@ -23,7 +31,9 @@ async function fetchAllData() {
     try {
         const [scriptsRes, infoRes] = await Promise.all([
             fetch(SCRIPTS_URL).then(r => r.json()),
-            fetch(INFO_URL).then(r => r.json()).catch(() => [])
+            fetch(INFO_URL).then(r => r.json()).catch(async () => {
+                return fetch(`https://opensheet.elk.sh/${SHEET_ID}/2`).then(r => r.json()).catch(() => []);
+            })
         ]);
         
         allScripts = scriptsRes.map(row => ({
@@ -99,13 +109,14 @@ function filterContent(type, category, clickedBtn) {
         const filtered = allInfos.filter(s => s.category === category);
         renderScripts(filtered);
     } else {
-        // Live search
-        const query = searchBar.value.toLowerCase();
+        // Αναζήτηση χωρίς Τόνους & Κεφαλαία
+        const query = normalizeText(searchBar.value);
         const pool = [...allScripts, ...allInfos];
+        
         const filtered = pool.filter(s => 
-            (s.title && s.title.toLowerCase().includes(query)) || 
-            (s.text && s.text.toLowerCase().includes(query)) ||
-            (s.category && s.category.toLowerCase().includes(query))
+            normalizeText(s.title).includes(query) || 
+            normalizeText(s.text).includes(query) ||
+            normalizeText(s.category).includes(query)
         );
         renderScripts(filtered);
     }
