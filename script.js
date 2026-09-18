@@ -157,8 +157,10 @@ function renderScripts(items) {
 }
 
 function copyToClipboard(text, btn) {
-    // Αφαιρούμε τυχόν tags πριν την αντιγραφή στο πρόχειρο
-    const cleanText = text.replace(/\[\/?(red\vert{}b\vert{}u)\]/gi, '').replace(/<[^>]*>?/gm, '');
+    // Καθαρισμός tags [red], [b], [u] και HTML πριν την αντιγραφή
+    let cleanText = text
+        .replace(/\[\/?(red\vert{}b\vert{}u)\]/gi, '')
+        .replace(/<[^>]*>?/gm, '');
     
     navigator.clipboard.writeText(cleanText).then(() => {
         const originalText = btn.innerHTML;
@@ -187,33 +189,27 @@ function toggleTheme() {
     }
 }
 
-// Επεξεργασία κειμένου με απλές συντομεύσεις [red], [b], [u]
+// Μετατροπή [red], [b], [u] & HTML links
 function formatTextWithFormatting(str) {
     if (!str) return '';
     
     let formatted = str;
 
-    // Μετατροπή [red]...[/red] σε κόκκινο έντονο κείμενο
+    // [red]λόγια[/red] -> Κόκκινο & Bold
     formatted = formatted.replace(/\[red\](.*?)\[\/red\]/gi, '<span style="color:#ef4444; font-weight:bold;">$1</span>');
-    // Μετατροπή [b]...[/b] σε έντονο κείμενο
+    // [b]λόγια[/b] -> Bold
     formatted = formatted.replace(/\[b\](.*?)\[\/b\]/gi, '<strong>$1</strong>');
-    // Μετατροπή [u]...[/u] σε υπογραμμισμένο κείμενο
+    // [u]λόγια[/u] -> Underline
     formatted = formatted.replace(/\[u\](.*?)\[\/u\]/gi, '<u>$1</u>');
 
-    // Αν περιέχει ήδη HTML links
+    // Αν περιέχει ήδη HTML (π.χ. <a href...>)
     if (/<[a-z][\s\S]*>/i.test(formatted)) {
         return formatted;
     }
 
-    // Αυτόματη μετατροπή σκέτων URLs (http/https) σε links
+    // Αυτόματη μετατροπή σκέτων links (http/https) σε clickable
     const urlPattern = /(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     return formatted.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-}
-
-function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-    );
 }
 
 function escapeQuotes(str) {
