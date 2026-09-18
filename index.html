@@ -1,9 +1,42 @@
-<header class="navbar">
-    <div class="nav-left">
-        <span class="brand-text">Stoiximan</span>
-        <span class="app-divider">|</span>
-        <span class="app-title">CS Chat Scripts</span>
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stoiximan CS Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Stoiximan Top Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-left">
+            <span class="brand-text">Stoiximan</span>
+            <span class="app-divider">|</span>
+            <span class="app-title">CS Chat Scripts</span>
+        </div>
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">☀️ Light Mode</button>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar Κατηγοριών -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Κατηγορίες</h3>
+            </div>
+            <div id="category-buttons"></div>
+        </aside>
+
+        <!-- Κύριο Περιεχόμενο -->
+        <main class="content">
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="🔍 Αναζήτηση απάντησης ή λέξης-κλειδιού..." onkeyup="filterScripts()">
+            </div>
+            <div id="scripts-container" class="scripts-grid"></div>
+        </main>
     </div>
-    <!-- Κουμπί Αλλαγής Θέματος -->
-    <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">☀️ Light Mode</button>
-</header>
+
+    <script src="script.js"></script>
+</body>
+</html>
