@@ -16,7 +16,6 @@ function normalizeText(text) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    // Επαναφορά θέματος - Προεπιλογή Light Mode
     const savedTheme = localStorage.getItem('theme');
     const themeBtn = document.getElementById('theme-toggle');
     
@@ -144,8 +143,8 @@ function renderScripts(items) {
 
         card.innerHTML = `
             <div>
-                <h4>${formatTextWithLinks(item.title)}</h4>
-                <p>${formatTextWithLinks(item.text)}</p>
+                <h4>${formatTextWithFormatting(item.title)}</h4>
+                <p>${formatTextWithFormatting(item.text)}</p>
             </div>
             ${!isInfo ? `
             <button class="copy-btn" onclick="copyToClipboard(\`${escapeQuotes(item.text)}\`, this)">
@@ -158,8 +157,8 @@ function renderScripts(items) {
 }
 
 function copyToClipboard(text, btn) {
-    // Αφαιρούμε τυχόν HTML tags πριν την αντιγραφή στο πρόχειρο
-    const cleanText = text.replace(/<[^>]*>?/gm, '');
+    // Αφαιρούμε τυχόν tags πριν την αντιγραφή στο πρόχειρο
+    const cleanText = text.replace(/\[\/?(red\vert{}b\vert{}u)\]/gi, '').replace(/<[^>]*>?/gm, '');
     
     navigator.clipboard.writeText(cleanText).then(() => {
         const originalText = btn.innerHTML;
@@ -188,18 +187,27 @@ function toggleTheme() {
     }
 }
 
-// Επεξεργασία κειμένου ώστε να επιτρέπει HTML tags και αυτόματα URLs
-function formatTextWithLinks(str) {
+// Επεξεργασία κειμένου με απλές συντομεύσεις [red], [b], [u]
+function formatTextWithFormatting(str) {
     if (!str) return '';
     
-    // Αν το κείμενο περιέχει ήδη HTML tags (π.χ. <a href=...), το προβάλλουμε απευθείας
-    if (/<[a-z][\s\S]*>/i.test(str)) {
-        return str;
+    let formatted = str;
+
+    // Μετατροπή [red]...[/red] σε κόκκινο έντονο κείμενο
+    formatted = formatted.replace(/\[red\](.*?)\[\/red\]/gi, '<span style="color:#ef4444; font-weight:bold;">$1</span>');
+    // Μετατροπή [b]...[/b] σε έντονο κείμενο
+    formatted = formatted.replace(/\[b\](.*?)\[\/b\]/gi, '<strong>$1</strong>');
+    // Μετατροπή [u]...[/u] σε υπογραμμισμένο κείμενο
+    formatted = formatted.replace(/\[u\](.*?)\[\/u\]/gi, '<u>$1</u>');
+
+    // Αν περιέχει ήδη HTML links
+    if (/<[a-z][\s\S]*>/i.test(formatted)) {
+        return formatted;
     }
 
-    // Διαφορετικά, μετατρέπουμε αυτόματα τα σκέτα URLs (http/https) σε links
+    // Αυτόματη μετατροπή σκέτων URLs (http/https) σε links
     const urlPattern = /(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    return escapeHTML(str).replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    return formatted.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 }
 
 function escapeHTML(str) {
