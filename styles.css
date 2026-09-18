@@ -1,25 +1,25 @@
-/* Stoiximan Brand & Theme Variables */
+/* Stoiximan Brand & Theme Variables - Default Light Mode */
 :root {
-    --bg-main: #0b0f19;       
-    --bg-card: #151c2c;       
-    --bg-hover: #1e283d;      
-    --border-color: #243047;  
-    --primary-blue: #0066ff;  
-    --neon-green: #00ff66;    
-    --text-white: #ffffff;
-    --text-muted: #94a3b8;
-    --logo-color: #ffffff;
-}
-
-/* Light Mode Overrides */
-body.light-mode {
     --bg-main: #f4f6f9;
     --bg-card: #ffffff;
     --bg-hover: #e2e8f0;
     --border-color: #cbd5e1;
+    --primary-blue: #0066ff;  
+    --neon-green: #00ff66;    
     --text-white: #0f172a;
     --text-muted: #64748b;
-    --logo-color: #0066ff;
+    --logo-color: #0066ff;    /* Μπλε Stoiximan logo στο Light Mode */
+}
+
+/* Dark Mode Overrides */
+body.dark-mode {
+    --bg-main: #0b0f19;       
+    --bg-card: #151c2c;       
+    --bg-hover: #1e283d;      
+    --border-color: #243047;  
+    --text-white: #ffffff;
+    --text-muted: #94a3b8;
+    --logo-color: #ffffff;    /* Λευκό logo στο Dark Mode */
 }
 
 body {
