@@ -6,7 +6,6 @@ const INFO_URL = `https://opensheet.elk.sh/${SHEET_ID}/2`;
 
 let allScripts = [];
 let allInfos = [];
-let currentMode = 'scripts'; // 'scripts' ή 'info'
 
 window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme');
@@ -56,6 +55,8 @@ function renderCategories() {
     const scriptsContainer = document.getElementById('category-buttons');
     const infoContainer = document.getElementById('info-category-buttons');
 
+    if (!scriptsContainer || !infoContainer) return;
+
     // 1. Κατηγορίες Scripts
     const scriptCats = ['Όλα', ...new Set(allScripts.map(s => s.category).filter(Boolean))];
     scriptsContainer.innerHTML = '';
@@ -71,7 +72,7 @@ function renderCategories() {
     const infoCats = [...new Set(allInfos.map(s => s.category).filter(Boolean))];
     infoContainer.innerHTML = '';
     if (infoCats.length === 0) {
-        infoContainer.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Δεν υπάρχουν SOS ακόμα.</p>';
+        infoContainer.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem; margin:0;">Δεν υπάρχουν SOS ακόμα.</p>';
     } else {
         infoCats.forEach(cat => {
             const btn = document.createElement('button');
@@ -90,17 +91,15 @@ function filterContent(type, category, clickedBtn) {
     const searchBar = document.getElementById('search-bar');
 
     if (type === 'scripts') {
-        currentMode = 'scripts';
         if (searchBar) searchBar.value = '';
         const filtered = category === 'Όλα' ? allScripts : allScripts.filter(s => s.category === category);
         renderScripts(filtered);
     } else if (type === 'info') {
-        currentMode = 'info';
         if (searchBar) searchBar.value = '';
         const filtered = allInfos.filter(s => s.category === category);
         renderScripts(filtered);
     } else {
-        // Live search φιλτράρισμα
+        // Live search
         const query = searchBar.value.toLowerCase();
         const pool = [...allScripts, ...allInfos];
         const filtered = pool.filter(s => 
