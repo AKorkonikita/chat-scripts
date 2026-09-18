@@ -16,11 +16,15 @@ function normalizeText(text) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    // Επαναφορά θέματος - Προεπιλογή Light Mode
     const savedTheme = localStorage.getItem('theme');
     const themeBtn = document.getElementById('theme-toggle');
     
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (themeBtn) themeBtn.innerHTML = '☀️ Light Mode';
+    } else {
+        document.body.classList.remove('dark-mode');
         if (themeBtn) themeBtn.innerHTML = '🌙 Dark Mode';
     }
 
@@ -173,14 +177,14 @@ function toggleTheme() {
     const body = document.body;
     const btn = document.getElementById('theme-toggle');
     
-    body.classList.toggle('light-mode');
+    body.classList.toggle('dark-mode');
     
-    if (body.classList.contains('light-mode')) {
-        if (btn) btn.innerHTML = '🌙 Dark Mode';
-        localStorage.setItem('theme', 'light');
-    } else {
+    if (body.classList.contains('dark-mode')) {
         if (btn) btn.innerHTML = '☀️ Light Mode';
         localStorage.setItem('theme', 'dark');
+    } else {
+        if (btn) btn.innerHTML = '🌙 Dark Mode';
+        localStorage.setItem('theme', 'light');
     }
 }
 
