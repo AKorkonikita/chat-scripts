@@ -8,6 +8,7 @@
     --neon-green: #00ff66;    
     --text-white: #ffffff;
     --text-muted: #94a3b8;
+    --logo-color: #ffffff;    /* Λευκό logo στο Dark Mode */
 }
 
 /* Light Mode Overrides */
@@ -18,6 +19,7 @@ body.light-mode {
     --border-color: #cbd5e1;
     --text-white: #0f172a;
     --text-muted: #64748b;
+    --logo-color: #0066ff;    /* Μπλε Stoiximan logo στο Light Mode */
 }
 
 body {
@@ -47,11 +49,12 @@ body {
 }
 
 .brand-text {
-    color: var(--text-white);
+    color: var(--logo-color);
     font-size: 2rem;
     font-weight: 900;
     letter-spacing: -1px;
     font-style: italic;
+    transition: color 0.3s ease;
 }
 
 .app-divider {
