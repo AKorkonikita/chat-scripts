@@ -13,25 +13,30 @@
         <div class="nav-left">
             <span class="brand-text">Stoiximan</span>
             <span class="app-divider">|</span>
-            <span class="app-title">CS Chat Scripts</span>
+            <span class="app-title">CS Chat Scripts & Info</span>
         </div>
         <!-- Theme Toggle Button -->
         <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">☀️ Light Mode</button>
     </header>
 
     <div class="container">
-        <!-- Sidebar Κατηγοριών -->
+        <!-- Sidebar Κατηγοριών & SOS Info -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h3>Κατηγορίες</h3>
+                <h3>💬 Chat Scripts</h3>
             </div>
             <div id="category-buttons"></div>
+
+            <div class="sidebar-header" style="margin-top: 24px;">
+                <h3>💡 SOS Πληροφορίες</h3>
+            </div>
+            <div id="info-category-buttons"></div>
         </aside>
 
         <!-- Κύριο Περιεχόμενο -->
         <main class="content">
             <div class="search-container">
-                <input type="text" id="search-bar" placeholder="🔍 Αναζήτηση απάντησης ή λέξης-κλειδιού..." onkeyup="filterScripts()">
+                <input type="text" id="search-bar" placeholder="🔍 Αναζήτηση απάντησης, κανόνα ή λέξης-κλειδιού..." onkeyup="filterContent()">
             </div>
             <div id="scripts-container" class="scripts-grid"></div>
         </main>
