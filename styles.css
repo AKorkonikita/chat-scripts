@@ -12,12 +12,12 @@
 
 /* Light Mode Overrides */
 body.light-mode {
-    --bg-main: #f0f2f5;
+    --bg-main: #f4f6f9;
     --bg-card: #ffffff;
-    --bg-hover: #e4e6eb;
-    --border-color: #d8dadf;
-    --text-white: #050505;
-    --text-muted: #65676b;
+    --bg-hover: #e2e8f0;
+    --border-color: #cbd5e1;
+    --text-white: #0f172a;
+    --text-muted: #64748b;
 }
 
 body {
@@ -26,6 +26,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Header Bar */
@@ -36,7 +37,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .nav-left {
@@ -135,7 +136,7 @@ body {
 
 .cat-btn.active {
     background: var(--primary-blue);
-    color: #ffffff;
+    color: #ffffff !important;
     border-color: var(--primary-blue);
     font-weight: 700;
 }
